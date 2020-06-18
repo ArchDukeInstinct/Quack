@@ -1,0 +1,8 @@
+void foo()
+	int a = 7
+	
+	if a > 10
+		write("%% is more than 10", a)
+	
+	if a < 10
+		write("%% is less than 10", a)
