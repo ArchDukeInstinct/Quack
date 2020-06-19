@@ -1,15 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="parser.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="token.h" />
-    <ClInclude Include="fileparser.h" />
+    <ClInclude Include="fileparser.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="parser.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="token.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="compiler.h">
+      <Filter>Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="list.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="stack.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="instruction.h">
+      <Filter>Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="interpreter.h">
+      <Filter>Runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="parser.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="token.cpp" />
-    <ClCompile Include="fileparser.cpp" />
+    <ClCompile Include="fileparser.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="parser.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="token.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="compiler.cpp">
+      <Filter>Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="instruction.cpp">
+      <Filter>Runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="interpreter.cpp">
+      <Filter>Runtime</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{3a8d3242-7da5-403c-92ee-88335da4c86f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Compiler">
+      <UniqueIdentifier>{1e90caac-9bf8-4f7c-a9be-46aca671e670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runtime">
+      <UniqueIdentifier>{3711a928-e62d-47fd-ab4a-e9f500209887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{ff84c408-b2ac-4061-b89f-6bee58d6516d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
