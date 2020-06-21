@@ -1,41 +1,60 @@
 #pragma once
 
-namespace qck
+namespace qck::Runtime
 {
+	/*
+		Enum to functions
+
+		Regex:		(?:(?:\s*)|(?:\/\/.+))*([a-zA-Z]+)(?: = 0)?,
+		Replace:	void instr$1\(\)\n{\n\n}\n\n
+
+		Enum to function pointer array
+
+		Regex:		(?:(?:\s*)|(?:\/\/.+))*([a-zA-Z]+)(?: = 0)?,
+		Replace:	instructions\[(unsigned int) Instruction::$1\] = instr$1;\n
+	*/
+
 	enum class Instruction
 	{
-		Null,
+		Null = 0,
 
-		Int_Push,
-		Int_Pop,
-		Int_GetLocal,
-		Int_SetLocal,
-		Int_GetGlobal,
-		Int_SetGlobal,
-		Int_Addition,
-		Int_Subtraction,
-		Int_Multiplication,
-		Int_Division,
-		Int_Modulus,
-		Int_To_Str,
+		// Integer
+		IntPush,
+		IntPop,
+		IntGetLocal,
+		IntSetLocal,
+		IntGetGlobal,
+		IntSetGlobal,
+		IntAddition,
+		IntSubtraction,
+		IntMultiplication,
+		IntDivision,
+		IntModulus,
+		IntToStr,
 
-		Str_Push,
-		Str_Pop,
-		Str_GetLocal,
-		Str_SetLocal,
-		Str_GetGlobal,
-		Str_SetGlobal,
-		Str_Concatenate,
-		Str_GetLength,
-		Str_To_Int,
+		// String
+		StrPush,
+		StrPop,
+		StrGetLocal,
+		StrSetLocal,
+		StrGetGlobal,
+		StrSetGlobal,
+		StrConcatenate,
+		StrGetLength,
+		StrToInt,
 
+		// Control
 		Condition,
 		Goto,
 		Break,
 		Return,
 
-		Fn_Write,
+		// Builtin
+		FnWrite,
 
 		Total
 	};
+
+	extern void instrInit();
+	extern void instrRun(int*, int);
 }

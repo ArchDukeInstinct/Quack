@@ -5,8 +5,11 @@ qck::Parser::Parser()
 {
 	buffer		= new char[BUFFER_SIZE];
 	token		= new char[TOKEN_SIZE];
+	tokenCount	= 0;
 	chrPrev		= '\0';
 	chrCurr		= '\0';
+	tabPrev		= 0;
+	tabCurr		= 0;
 	position	= -1;
 	count		= 0;
 	state		= State::LineNext;

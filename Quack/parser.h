@@ -63,7 +63,6 @@ namespace qck
 		virtual ~Parser();
 
 		Token getNextToken();
-
 		std::string getStringValue();
 	};
 }

@@ -17,14 +17,20 @@
     <ClInclude Include="list.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="stack.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="instruction.h">
       <Filter>Runtime</Filter>
     </ClInclude>
     <ClInclude Include="interpreter.h">
       <Filter>Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="linkedstack.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="stack.h">
+      <Filter>Runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="converter.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,12 @@
     </ClCompile>
     <ClCompile Include="interpreter.cpp">
       <Filter>Runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="stack.cpp">
+      <Filter>Runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="converter.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 #include "token.h"
 #include "parser.h"
 #include "list.h"
-#include "stack.h"
+#include "linkedstack.h"
 #include "instruction.h"
 
 namespace qck::Compilation
@@ -13,6 +13,7 @@ namespace qck::Compilation
 	class RoutineCompiler;
 	class BlockCompiler;
 	class StatementCompiler;
+	class VariableCompiler;
 	class ExpressionCompiler;
 	class InvocationCompiler;
 
@@ -27,59 +28,74 @@ namespace qck::Compilation
 		Parser* parser;
 		Token tokenPrev;
 		Token tokenCurr;
+		Token tokenNext;
 
-		List<uint8_t> instructions;
+		LinkedStack<int> stackInteger;
+		LinkedStack<std::string> stackString;
+		LinkedStack<Token> stackToken;
+
+		List<int> listInstruction;
+
+		CompilerContext();
+		~CompilerContext();
 	};
 
 	// ========================================================================================================================================
-	// CompilerBase
+	// CompilerComponent
 	// ========================================================================================================================================
 
-	class CompilerBase
+	class CompilerComponent
 	{
 		private:
 
-		CompilerContext* context;
+		CompilerContext& context;
 
 		protected:
 
 		bool next();
-		Token current();
+		void expect();
 		Token previous();
+		Token current();
 
-		int peekInteger();
-		void pushInteger();
-		int popInteger();
+		// Instruction
+		void instr(qck::Runtime::Instruction);
+		void instr(int);
 
-		std::string peekString();
-		void pushString();
-		std::string popString();
+		// Stacks
+		LinkedStack<int>& integers();
+		LinkedStack<std::string>& strings();
+		LinkedStack<Token>& tokens();
+
+		// Value
+		int getInt();
+		std::string getString();
 
 		public:
 
-		CompilerBase(CompilerContext*);
+		CompilerComponent(CompilerContext&);
 	};
 
 	// ========================================================================================================================================
 	// GlobalCompiler
 	// ========================================================================================================================================
 
-	class GlobalCompiler : public CompilerBase
+	class GlobalCompiler : public CompilerComponent
 	{
 		RoutineCompiler& routine;
+		ExpressionCompiler& expression;
 
 		public:
 
-		GlobalCompiler(CompilerContext*, RoutineCompiler&);
+		GlobalCompiler(CompilerContext&, RoutineCompiler&, ExpressionCompiler&);
 
-		void operator ()();
+		bool operator ()();
 	};
 
 	// ========================================================================================================================================
 	// RoutineCompiler
 	// ========================================================================================================================================
 
-	class RoutineCompiler : public CompilerBase
+	class RoutineCompiler : public CompilerComponent
 	{
 		private:
 		
@@ -87,7 +103,7 @@ namespace qck::Compilation
 
 		public:
 
-		RoutineCompiler(CompilerContext*, BlockCompiler&);
+		RoutineCompiler(CompilerContext&, BlockCompiler&);
 
 		void operator ()();
 	};
@@ -96,7 +112,7 @@ namespace qck::Compilation
 	// BlockCompiler
 	// ========================================================================================================================================
 
-	class BlockCompiler : public CompilerBase
+	class BlockCompiler : public CompilerComponent
 	{
 		private:
 
@@ -104,7 +120,7 @@ namespace qck::Compilation
 
 		public:
 
-		BlockCompiler(CompilerContext*, StatementCompiler&);
+		BlockCompiler(CompilerContext&, StatementCompiler&);
 
 		void operator ()();
 	};
@@ -113,7 +129,7 @@ namespace qck::Compilation
 	// StatementCompiler
 	// ========================================================================================================================================
 
-	class StatementCompiler : public CompilerBase
+	class StatementCompiler : public CompilerComponent
 	{
 		private:
 
@@ -123,7 +139,24 @@ namespace qck::Compilation
 
 		public:
 
-		StatementCompiler(CompilerContext*, BlockCompiler&, ExpressionCompiler&, InvocationCompiler&);
+		StatementCompiler(CompilerContext&, BlockCompiler&, ExpressionCompiler&, InvocationCompiler&);
+
+		void operator ()();
+	};
+
+	// ========================================================================================================================================
+	// VariableCompiler
+	// =======================================================================================================================================
+
+	class VariableCompiler : public CompilerComponent
+	{
+		private:
+
+		ExpressionCompiler& expression;
+
+		public:
+
+		VariableCompiler(CompilerContext&, ExpressionCompiler&);
 
 		void operator ()();
 	};
@@ -132,7 +165,7 @@ namespace qck::Compilation
 	// ExpressionCompiler
 	// ========================================================================================================================================
 
-	class ExpressionCompiler : public CompilerBase
+	class ExpressionCompiler : public CompilerComponent
 	{
 		private:
 
@@ -140,7 +173,7 @@ namespace qck::Compilation
 
 		public:
 
-		ExpressionCompiler(CompilerContext*, InvocationCompiler&);
+		ExpressionCompiler(CompilerContext&, InvocationCompiler&);
 
 		void operator ()();
 	};
@@ -149,7 +182,7 @@ namespace qck::Compilation
 	// InvocationCompiler
 	// ========================================================================================================================================
 
-	class InvocationCompiler : public CompilerBase
+	class InvocationCompiler : public CompilerComponent
 	{
 		private:
 
@@ -157,7 +190,7 @@ namespace qck::Compilation
 
 		public:
 
-		InvocationCompiler(CompilerContext*, ExpressionCompiler&);
+		InvocationCompiler(CompilerContext&, ExpressionCompiler&);
 
 		void operator ()();
 	};
@@ -165,6 +198,10 @@ namespace qck::Compilation
 
 namespace qck
 {
+	// ========================================================================================================================================
+	// Compiler
+	// ========================================================================================================================================
+
 	class Compiler
 	{
 		private:
@@ -179,10 +216,17 @@ namespace qck
 
 		public:
 
+		// ====================================================================================================================================
+		// Constructor / Destructor
+		// ====================================================================================================================================
+
 		Compiler();
 		~Compiler();
 
-		void setParser(Parser*);
-		void setParser(Parser&);
+		// ====================================================================================================================================
+		// Compile
+		// ====================================================================================================================================
+
+		bool compile(Parser*);
 	};
 }
