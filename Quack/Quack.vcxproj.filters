@@ -8,14 +8,8 @@
     <ClInclude Include="parser.h">
       <Filter>Parser</Filter>
     </ClInclude>
-    <ClInclude Include="token.h">
-      <Filter>Parser</Filter>
-    </ClInclude>
     <ClInclude Include="compiler.h">
       <Filter>Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="list.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="instruction.h">
       <Filter>Runtime</Filter>
@@ -23,14 +17,26 @@
     <ClInclude Include="interpreter.h">
       <Filter>Runtime</Filter>
     </ClInclude>
-    <ClInclude Include="linkedstack.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="stack.h">
       <Filter>Runtime</Filter>
     </ClInclude>
     <ClInclude Include="converter.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="token.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="datatype.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="signature.h">
+      <Filter>Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="context.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="data.h">
+      <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -39,9 +45,6 @@
       <Filter>Parser</Filter>
     </ClCompile>
     <ClCompile Include="parser.cpp">
-      <Filter>Parser</Filter>
-    </ClCompile>
-    <ClCompile Include="token.cpp">
       <Filter>Parser</Filter>
     </ClCompile>
     <ClCompile Include="compiler.cpp">
@@ -59,6 +62,15 @@
     <ClCompile Include="converter.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="token.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="signature.cpp">
+      <Filter>Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="context.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Parser">
@@ -72,6 +84,9 @@
     </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{ff84c408-b2ac-4061-b89f-6bee58d6516d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{af49229a-84e2-4a7d-b9b9-e89b5faf3729}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

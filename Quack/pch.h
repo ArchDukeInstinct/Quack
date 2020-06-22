@@ -6,6 +6,11 @@
 #include <sstream>
 #include <fstream>
 #include <initializer_list>
+#include <vector>
+#include <list>
+#include <forward_list>
+#include <unordered_map>
+#include <variant>
 
 #ifdef _DEBUG
 

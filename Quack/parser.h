@@ -64,5 +64,7 @@ namespace qck
 
 		Token getNextToken();
 		std::string getStringValue();
+
+		void reset();
 	};
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "datatype.h"
+
 namespace qck
 {
 	// ========================================================================================================================================
@@ -26,7 +28,6 @@ namespace qck
 			GroupNext,
 			GroupEnd,
 			LineEnd,
-			Accessor,
 
 			// Data Types
 			Void,
@@ -45,16 +46,17 @@ namespace qck
 			Identifier,
 
 			// Control
-			If,	
+			If,
 			While,
-			For,		
-			Yield,		
-			Break,	
-			Return,		
+			For,
+			Yield,
+			Break,
+			Return,
 
 			// Operators
 			Inverse,
 			Assign,
+			Accessor,
 
 			// ---- Math
 			Addition,
@@ -103,17 +105,27 @@ namespace qck
 		// Category
 		// ====================================================================================================================================
 
+		enum class Category
+		{
+			None,
+			DataType,
+			Operator,
+			Term
+		};
+
 		bool isSyntax();
 		bool isDataType();
 		bool isControl();
 		bool isOperator();
 		bool isTerm();
+		bool is(Category);
 
 		// ====================================================================================================================================
 		// Utility
 		// ====================================================================================================================================
 
 		std::string toString();
+		DataType toType();
 
 		// ====================================================================================================================================
 		// Operators

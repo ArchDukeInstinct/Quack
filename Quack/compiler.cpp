@@ -2,226 +2,314 @@
 #include "compiler.h"
 #include "converter.h"
 
-qck::Compilation::CompilerContext::CompilerContext()
+void qck::Compilation::Writer::write(Runtime::Instruction value)
 {
-	parser = nullptr;
+	instructions.push_back((int) value);
 }
 
-qck::Compilation::CompilerContext::~CompilerContext()
+void qck::Compilation::Writer::write(bool value)
 {
-
+	instructions.push_back(value == true);
 }
 
-qck::Compilation::CompilerComponent::CompilerComponent(CompilerContext& pContext) :
-	context(pContext)
+void qck::Compilation::Writer::write(int value)
 {
-
+	instructions.push_back(value);
 }
 
-bool qck::Compilation::CompilerComponent::next()
+void qck::Compilation::Writer::write(const std::string& value)
 {
-	context.tokenPrev = context.tokenCurr;
-	context.tokenCurr = context.parser->getNextToken();
-
-	return context.tokenCurr != Token::Type::None;
+	instructions.push_back((int) value.size());
+	for (auto c : value)
+		instructions.push_back((int) c);
 }
 
-void qck::Compilation::CompilerComponent::expect()
+void qck::Compilation::Writer::copyTo(int*& data, int& count)
 {
-	context.tokenPrev = context.tokenCurr;
-	context.tokenCurr = context.parser->getNextToken();
+	int size = instructions.size();
 
-	if (context.tokenCurr == Token::Type::None)
-		throw "Unexpected end of input";
+	count	= size;
+	data	= new int[size];
+
+	for (int i = 0; i < size; ++i)
+		data[i] = instructions[i];
 }
 
-qck::Token qck::Compilation::CompilerComponent::previous()
+void qck::Compilation::Writer::clear()
 {
-	return context.tokenPrev;
+	instructions.clear();
 }
 
-qck::Token qck::Compilation::CompilerComponent::current()
+qck::Compilation::Writer& qck::Compilation::Writer::operator <<(Runtime::Instruction value)
 {
-	return context.tokenCurr;
+	write(value);
+	return *this;
 }
 
-void qck::Compilation::CompilerComponent::instr(qck::Runtime::Instruction value)
+qck::Compilation::Writer& qck::Compilation::Writer::operator <<(bool value)
 {
-	context.listInstruction.insert((int) value);
+	write(value);
+	return *this;
 }
 
-void qck::Compilation::CompilerComponent::instr(int value)
+qck::Compilation::Writer& qck::Compilation::Writer::operator <<(int value)
 {
-	context.listInstruction.insert(value);
+	write(value);
+	return *this;
 }
 
-qck::LinkedStack<int>& qck::Compilation::CompilerComponent::integers()
+qck::Compilation::Writer& qck::Compilation::Writer::operator <<(const std::string& value)
 {
-	return context.stackInteger;
+	write(value);
+	return *this;
 }
 
-qck::LinkedStack<std::string>& qck::Compilation::CompilerComponent::strings()
+qck::Compilation::Writer& qck::Compilation::Writer::operator >>(Routine& routine)
 {
-	return context.stackString;
+	copyTo(routine.instrList, routine.instrCount);
+	return *this;
 }
 
-qck::LinkedStack<qck::Token>& qck::Compilation::CompilerComponent::tokens()
+qck::Compilation::TokenIterator::TokenIterator()
 {
-	return context.stackToken;
+	parser		= nullptr;
+	tokenCurr	= Token::Type::None;
+	tokenPrev	= Token::Type::None;
+	scope		= 0;
 }
 
-int qck::Compilation::CompilerComponent::getInt()
+bool qck::Compilation::TokenIterator::next()
 {
-	return stringToInt(context.parser->getStringValue());
-}
+	tokenPrev = tokenCurr;
+	tokenCurr = parser->getNextToken();
 
-std::string qck::Compilation::CompilerComponent::getString()
-{
-	return context.parser->getStringValue();
-}
-
-qck::Compilation::GlobalCompiler::GlobalCompiler(CompilerContext& pContext, RoutineCompiler& pRoutine, ExpressionCompiler& pExpression)
-	: CompilerComponent(pContext), routine(pRoutine), expression(pExpression)
-{
-
-}
-
-bool qck::Compilation::GlobalCompiler::operator ()()
-{
-	if (!next())
-		return false;
-
-	if (current().isDataType())
+	switch (tokenCurr.type)
 	{
-		expect();
+		case Token::Type::None:
+			return false;
 
-		// Store data type for variable / routine
-		tokens().push(current());
+		case Token::Type::ScopeBegin:
+			++scope;
+			break;
 
-		if (current().type == Token::Type::Identifier)
-		{
-			// Store identifier for variable / routine
-			strings().push(getString());
+		case Token::Type::ScopeEnd:
+			--scope;
+			break;
 
-			// Branch into variable or routine
-			expect();
-
-			switch (current().type)
-			{
-				case Token::Type::GroupBegin:
-					routine();
-					break;
-
-				case Token::Type::Assign:
-				case Token::Type::LineEnd:
-
-					break;
-
-				default:
-					throw "Unexpected token";
-			}
-		}
+		case Token::Type::Invalid:
+			throw "Encountered invalid token";
 	}
 
 	return true;
 }
 
-qck::Compilation::RoutineCompiler::RoutineCompiler(CompilerContext& pContext, BlockCompiler& pBlock)
-	: CompilerComponent(pContext), block(pBlock)
+void qck::Compilation::TokenIterator::expect()
+{
+	if (!next())
+		throw "Unexpected end of input";
+}
+
+void qck::Compilation::TokenIterator::expect(Token::Type type)
+{
+	if (!next())
+		throw "Unexpected end of input";
+
+	if (tokenCurr != type)
+		throw "Expected token '" + Token(type).toString() + "', not '" + tokenCurr.toString() + "'";
+}
+
+void qck::Compilation::TokenIterator::expect(Token::Category category)
+{
+	if (!next())
+		throw "Unexpected end of input";
+
+	if (!tokenCurr.is(category))
+		throw "Token '" + tokenCurr.toString() + "' was unexpected";
+}
+
+void qck::Compilation::TokenIterator::escape()
+{
+	int current = scope;
+	while (next() && scope >= current);
+}
+
+void qck::Compilation::Stack::typePush(DataType value)
+{
+	types.push_front(value);
+}
+
+qck::DataType qck::Compilation::Stack::typePop()
+{
+	qckAssert(!types.empty(), "String stack is empty");
+
+	auto result = *types.begin();
+	types.pop_front();
+
+	return result;
+}
+
+qck::DataType qck::Compilation::Stack::typePeek()
+{
+	qckAssert(!types.empty(), "String stack is empty");
+
+	return *types.begin();
+}
+
+void qck::Compilation::Stack::intPush(int value)
+{
+	integers.push_front(value);
+}
+
+int qck::Compilation::Stack::intPop()
+{
+	qckAssert(!integers.empty(), "Integer stack is empty");
+
+	auto result = *integers.begin();
+	integers.pop_front();
+
+	return result;
+}
+
+int qck::Compilation::Stack::intPeek()
+{
+	qckAssert(!integers.empty(), "Integer stack is empty");
+
+	return *integers.begin();
+}
+
+void qck::Compilation::Stack::strPush(const std::string& value)
+{
+	strings.push_front(value);
+}
+
+std::string qck::Compilation::Stack::strPop()
+{
+	qckAssert(!integers.empty(), "String stack is empty");
+
+	auto result = *strings.begin();
+	strings.pop_front();
+
+	return result;
+}
+
+std::string qck::Compilation::Stack::strPeek()
+{
+	qckAssert(!integers.empty(), "String stack is empty");
+
+	return *strings.begin();
+}
+
+void qck::Compiler::typePush()
+{
+	if (tokenCurr.is(Token::Category::DataType))
+		types.push_front(tokenCurr.toType());
+	else
+		throw "Token is not a data type";
+}
+
+void qck::Compiler::intPush()
+{
+	int value;
+
+	if (stringToInt(parser->getStringValue(), value))
+		integers.push_front(value);
+	else
+		throw "Token is not integer";
+}
+
+void qck::Compiler::strPush()
+{
+	strings.push_front(parser->getStringValue());
+}
+
+void qck::Compiler::expression()
 {
 
 }
 
-void qck::Compilation::RoutineCompiler::operator ()()
+void qck::Compiler::variable()
 {
 
 }
 
-qck::Compilation::BlockCompiler::BlockCompiler(CompilerContext& pContext, StatementCompiler& pStatement)
-	: CompilerComponent(pContext), statement(pStatement)
+void qck::Compiler::routine()
 {
 
 }
 
-void qck::Compilation::BlockCompiler::operator ()()
+void qck::Compiler::prelink()
 {
+	DataType type;
+	std::string name;
+	std::vector<DataType> params;
 
+	while (next())
+	{
+		if (tokenCurr.is(Token::Category::DataType))
+		{
+			type = tokenCurr.toType();
+
+			expect(Token::Type::Identifier);
+			name = parser->getStringValue();
+
+			expect();
+			if (tokenCurr == Token::Type::GroupBegin)
+			{
+				next();
+
+				while (tokenCurr.is(Token::Category::DataType))
+				{
+					params.push_back(tokenCurr.toType());
+					expect(Token::Type::Identifier);
+
+					expect();
+
+					if (tokenCurr == Token::Type::GroupNext)
+						expect();
+				}
+
+				if (tokenCurr != Token::Type::GroupEnd)
+					throw "Expected ')'";
+
+				expect(Token::Type::LineEnd);
+				expect(Token::Type::ScopeBegin);
+				escape();
+
+				signatures.insert({type, name, params}, Compilation::Signature::Type::RoutineGlobal, context->routines.size());
+
+				context->routines.push_back(Routine());
+			}
+			else if (tokenCurr == Token::Type::Assign || tokenCurr == Token::Type::LineEnd)
+			{
+
+			}
+		}
+	}
 }
 
-qck::Compilation::StatementCompiler::StatementCompiler(CompilerContext& pContext, BlockCompiler& pBlock, ExpressionCompiler& pExpression, InvocationCompiler& pInvocation)
-	: CompilerComponent(pContext), block(pBlock), expression(pExpression), invocation(pInvocation)
-{
-
-}
-
-void qck::Compilation::StatementCompiler::operator ()()
-{
-
-}
-
-qck::Compilation::VariableCompiler::VariableCompiler(CompilerContext& pContext, ExpressionCompiler& pExpression)
-	: CompilerComponent(pContext), expression(pExpression)
-{
-
-}
-
-void qck::Compilation::VariableCompiler::operator ()()
-{
-
-}
-
-qck::Compilation::ExpressionCompiler::ExpressionCompiler(CompilerContext& pContext, InvocationCompiler& pInvocation)
-	: CompilerComponent(pContext), invocation(pInvocation)
-{
-
-}
-
-void qck::Compilation::ExpressionCompiler::operator ()()
-{
-
-}
-
-qck::Compilation::InvocationCompiler::InvocationCompiler(CompilerContext& pContext, ExpressionCompiler& pExpression)
-	: CompilerComponent(pContext), expression(pExpression)
-{
-
-}
-
-void qck::Compilation::InvocationCompiler::operator ()()
-{
-
-}
-
-qck::Compiler::Compiler() :
-	global(context, routine, expression),
-	routine(context, block),
-	block(context, statement),
-	statement(context, block, expression, invocation),
-	expression(context, invocation),
-	invocation(context, expression)
-{
-
-}
-
-qck::Compiler::~Compiler()
+void qck::Compiler::build()
 {
 
 }
 
 bool qck::Compiler::compile(Parser* pParser)
 {
-	context.parser		= pParser;
-	context.tokenPrev	= Token::Type::None;
-	context.tokenCurr	= Token::Type::None;
-	context.tokenNext	= Token::Type::None;
-	
-	context.stackInteger.clear();
-	context.stackString.clear();
-	context.listInstruction.clear();
+	parser = pParser;
 
 	try
 	{
-		while (global());
+		prelink();
+	}
+	catch (std::string exception)
+	{
+		return false;
+	}
+
+	parser->reset();
+
+	try
+	{
+		build();
 	}
 	catch (std::string exception)
 	{

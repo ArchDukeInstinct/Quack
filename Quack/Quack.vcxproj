@@ -142,23 +142,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="compiler.h" />
+    <ClInclude Include="context.h" />
     <ClInclude Include="converter.h" />
+    <ClInclude Include="data.h" />
+    <ClInclude Include="datatype.h" />
     <ClInclude Include="fileparser.h" />
     <ClInclude Include="instruction.h" />
     <ClInclude Include="interpreter.h" />
-    <ClInclude Include="list.h" />
+    <ClInclude Include="signature.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="linkedstack.h" />
     <ClInclude Include="token.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="compiler.cpp" />
+    <ClCompile Include="context.cpp" />
     <ClCompile Include="converter.cpp" />
     <ClCompile Include="fileparser.cpp" />
     <ClCompile Include="instruction.cpp" />
     <ClCompile Include="interpreter.cpp" />
+    <ClCompile Include="signature.cpp" />
     <ClCompile Include="stack.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="pch.cpp">
