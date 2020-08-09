@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "fileparser.h"
+#include "compiler.h"
 
 using std::cout;
 using std::endl;
@@ -11,7 +12,11 @@ using namespace qck;
 int main(int argc, char** argv)
 {
 	auto root = fs::current_path().parent_path().string();
+	
 	FileParser parser;
+	Compiler compiler;
+	Context context;
+
 	Token token;
 	int col = 0;
 
@@ -23,10 +28,15 @@ int main(int argc, char** argv)
 				cout << endl;
 
 			if (!token.isTerm())
-				cout << setw(20) << "[" + token.toString() + "]";
+				cout << std::left << setw(20) << "[" + token.toString() + "]";
 			else
-				cout << setw(20) << "\"" + parser.getStringValue() + "\"";
+				cout << std::left << setw(20) << "\"" + parser.getStringValue() + "\"";
 		}
+
+		parser.reset();
+		
+		compiler.setContext(&context);
+		compiler.compile(&parser);
 
 		parser.close();
 	}

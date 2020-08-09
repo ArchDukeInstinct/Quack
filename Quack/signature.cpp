@@ -113,18 +113,8 @@ void qck::Compilation::SignatureMap::insert(const Signature& signature, Signatur
 	list->push_front({signature, t, i});
 }
 
-const qck::Compilation::SignatureObject* qck::Compilation::SignatureMap::search(const std::string& name) const
+const qck::Compilation::SignatureObject* qck::Compilation::SignatureMap::search(const Signature& signature) const
 {
-	Signature signature(name);
-	SignatureList* list		= getList(signature);
-	SignatureObject* item	= match(list, signature);
-
-	return item;
-}
-
-const qck::Compilation::SignatureObject* qck::Compilation::SignatureMap::search(const std::string& name, const std::vector<DataType>& params) const
-{
-	Signature signature(name, params);
 	SignatureList* list		= getList(signature);
 	SignatureObject* item	= match(list, signature);
 

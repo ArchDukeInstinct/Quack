@@ -384,9 +384,8 @@ void qck::Parser::reset()
 	tabPrev		= 0;
 	tabCurr		= 0;
 	position	= -1;
-	count		= 0;
 	state		= State::LineNext;
 	iterations	= 0;
 
-	rewind(buffer, BUFFER_SIZE);
+	count = rewind(buffer, BUFFER_SIZE);
 }

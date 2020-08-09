@@ -123,7 +123,6 @@ namespace qck::Compilation
 		// Search
 		// ====================================================================================================================================
 
-		const SignatureObject* search(const std::string&) const;
-		const SignatureObject* search(const std::string&, const std::vector<DataType>&) const;
+		const SignatureObject* search(const Signature&) const;
 	};
 }

@@ -222,6 +222,78 @@ void qck::Compiler::strPush()
 	strings.push_front(parser->getStringValue());
 }
 
+qck::Compiler::Compiler()
+{
+	context = nullptr;
+}
+
+qck::Compiler::~Compiler()
+{
+
+}
+
+void qck::Compiler::readSignature()
+{
+	if (tokenCurr.is(Token::Category::DataType))
+	{
+		signature.dataType = tokenCurr.toType();
+
+		expect(Token::Type::Identifier);
+		signature.identifier = parser->getStringValue();
+	}
+	else if (tokenCurr == Token::Type::Identifier)
+	{
+		signature.dataType		= DataType::None;
+		signature.identifier	= parser->getStringValue();
+	}
+
+	expect();
+
+	if (tokenCurr == Token::Type::GroupBegin)
+	{
+		next();
+
+		while (tokenCurr.is(Token::Category::DataType))
+		{
+			signature.parameters.push_back(tokenCurr.toType());
+			expect(Token::Type::Identifier);
+
+			expect();
+
+			if (tokenCurr == Token::Type::GroupNext)
+				expect();
+		}
+
+		if (tokenCurr != Token::Type::GroupEnd)
+			throw "Expected ')'";
+	}
+}
+
+void qck::Compiler::prelink()
+{
+	while (next())
+	{
+		if (tokenCurr.is(Token::Category::DataType))
+		{
+			readSignature();
+
+			if (tokenCurr == Token::Type::GroupEnd)
+			{
+				expect(Token::Type::LineEnd);
+				expect(Token::Type::ScopeBegin);
+				escape();
+
+				signatures.insert(signature, Compilation::Signature::Type::RoutineGlobal, context->routines.size());
+				context->routines.push_back(Routine());
+			}
+			else if (tokenCurr == Token::Type::Assign || tokenCurr == Token::Type::LineEnd)
+			{
+				throw "Global variables are not implemented yet";
+			}
+		}
+	}
+}
+
 void qck::Compiler::expression()
 {
 
@@ -237,59 +309,27 @@ void qck::Compiler::routine()
 
 }
 
-void qck::Compiler::prelink()
+void qck::Compiler::build()
 {
-	DataType type;
-	std::string name;
-	std::vector<DataType> params;
+	const Compilation::SignatureObject* obj;
 
 	while (next())
 	{
 		if (tokenCurr.is(Token::Category::DataType))
 		{
-			type = tokenCurr.toType();
+			readSignature();
 
-			expect(Token::Type::Identifier);
-			name = parser->getStringValue();
+			obj = signatures.search(signature);
 
-			expect();
-			if (tokenCurr == Token::Type::GroupBegin)
-			{
-				next();
-
-				while (tokenCurr.is(Token::Category::DataType))
-				{
-					params.push_back(tokenCurr.toType());
-					expect(Token::Type::Identifier);
-
-					expect();
-
-					if (tokenCurr == Token::Type::GroupNext)
-						expect();
-				}
-
-				if (tokenCurr != Token::Type::GroupEnd)
-					throw "Expected ')'";
-
-				expect(Token::Type::LineEnd);
-				expect(Token::Type::ScopeBegin);
-				escape();
-
-				signatures.insert({type, name, params}, Compilation::Signature::Type::RoutineGlobal, context->routines.size());
-
-				context->routines.push_back(Routine());
-			}
-			else if (tokenCurr == Token::Type::Assign || tokenCurr == Token::Type::LineEnd)
-			{
-
-			}
+			if (obj == nullptr)
+				throw "Signature does not exist";
 		}
 	}
 }
 
-void qck::Compiler::build()
+void qck::Compiler::setContext(Context* pContext)
 {
-
+	context = pContext;
 }
 
 bool qck::Compiler::compile(Parser* pParser)
@@ -300,7 +340,7 @@ bool qck::Compiler::compile(Parser* pParser)
 	{
 		prelink();
 	}
-	catch (std::string exception)
+	catch (const char*)
 	{
 		return false;
 	}
@@ -311,7 +351,7 @@ bool qck::Compiler::compile(Parser* pParser)
 	{
 		build();
 	}
-	catch (std::string exception)
+	catch (const char*)
 	{
 		return false;
 	}
