@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Operators</title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<h1>Operators</h1>
+		<section id="intro">
+            <p>Operators modify variables. They can get the sum, difference, product, etc of two numbers, concatenate strings, and so on.</p>
+            <p>When using an operator on 2 different data types, generally the data type that is more capable of representing both values is the result.</p>
+		</section>
+		<section id="examples">
+			<h2>Examples</h2>
+			<div class="def"><pre>
+/* ========== Example 1 ========== */
+
+int c = a + b
+int d = c * 5
+int e
+
+e = (a + b) * 5
+
+auto f = ++e
+
+/* ========== Example 2 ========== */
+
+string s = "Hello World!"
+int i = 5
+
+auto result = s + " " + i
+
+			</pre></div>
+        </section>
+        <section id="chart">
+            <h2>Data Types</h2>
+            <table class="chart chart-operators" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>=</td>
+                        <td>Assign</td>
+                        <td>Directly sets the value of a variable.</td>
+                    </tr>
+                    <tr class="heading">
+                        <td>Arithmetic</td>
+                        <td colspan="2">Applies mathmetical operations to numbers. These can be applied between bools, ints, and floats. When mixing types, false bool values will become 0 (int or float), true bool values will become 1 (int or float). Ints will be converted to floats.</td>
+                    </tr>
+                    <tr>
+                        <td>+</td>
+                        <td>Addition</td>
+                        <td>Adds two numbers together, returning the sum.</td>
+                    </tr>
+                    <tr>
+                        <td>-</td>
+                        <td>Subtraction</td>
+                        <td>Subtracts one number from another, returning the difference.</td>
+                    </tr>
+                    <tr>
+                        <td>*</td>
+                        <td>Multiplication</td>
+                        <td>Multiplies two numbers together, returning the product.</td>
+                    </tr>
+                    <tr>
+                        <td>/</td>
+                        <td>Division</td>
+                        <td>Divides one number from another, returning the quotient.</td>
+                    </tr>
+                    <tr>
+                        <td>%</td>
+                        <td>Modulus</td>
+                        <td>Divides one number from another, returning the remainder.</td>
+                    </tr>
+                    <tr>
+                        <td>**</td>
+                        <td>Exponent</td>
+                        <td>Raises one number to the power of another.</td>
+                    </tr>
+                    <tr class="heading">
+                        <td>Unary</td>
+                        <td colspan="2">Unary operators only work with one single variable instead of two. Some unary operators have prefix and postfix versions. The difference is prefix versions will return the value after the operation while postfix will return the value before the operation.</td>
+                    </tr>
+                    <tr>
+                        <td>++ (prefix &amp; postfix)</td>
+                        <td>Increment</td>
+                        <td>Adds 1 to a number.</td>
+                    </tr>
+                    <tr>
+                        <td>-- (prefix &amp; postfix)</td>
+                        <td>Decrement</td>
+                        <td>Subtracts 1 from a number.</td>
+                    </tr>
+                    <tr>
+                        <td>! (prefix)</td>
+                        <td>Not</td>
+                        <td>Inverts a boolean value. False becomes true and true becomes false.</td>
+                    </tr>
+                    <tr>
+                        <td>? (postfix)</td>
+                        <td>Not</td>
+                        <td>Inverts a boolean value. False becomes true and true becomes false.</td>
+                    </tr>
+                    <tr class="heading">
+                        <td>Comparison</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>==</td>
+                        <td>Equal</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>!=</td>
+                        <td>Not Equal</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>?=</td>
+                        <td>Threshold Equals</td>
+                        <td>Is number equal to value within a threshold. Useful for floating point values.<br />a ?= 5,0.1</td>
+                    </tr>
+                    <tr>
+                        <td>&gt;&lt;</td>
+                        <td>Range Equals</td>
+                        <td>Is number equal within a min/max range.<br />a &gt;&lt; 3,5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+		<script type="text/javascript" src="../page.js"></script>
+	</body>
+</html>

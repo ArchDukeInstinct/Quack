@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Routines</title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<h1>Routines</h1>
+		<section id="intro">
+			<p>Routines are Quack's analog to functions, they are comprised of an optional return type, an identifier, an optional list of parameters, and a block of statements. Routines can be called elsewhere in the code.</p>
+		</section>
+		<section id="definition">
+			<h2>Definition</h2>
+			<div class="def"><pre>
+type identifier()
+	statement...
+			
+type identifier(type parameter...)
+	statement...
+			</pre></div>
+		</section>
+		<section id="definition">
+			<h2>Examples</h2>
+			<div class="def"><pre>
+/* ========== Example 1 ========== */
+
+void main()
+	write("Quack!!!")
+	
+/* ========== Example 2 ========== */
+
+int getSum(int a, int b)
+	int result = a + b
+	
+	return result
+	
+/* ========== Example 3 ========== */
+
+void yetAnotherRoutine(int a)
+	string str = "The numbers are "
+	int b = getSum(a, 3)
+	a += 5
+	
+	if a > 0
+		write(a + " is greater than 0\n")
+	
+	if a > 10
+		write(a + " is greater than 10\n")
+	
+	str += a + ", " + b
+	write(str)
+
+			</pre></div>
+		</section>
+		<script type="text/javascript" src="../page.js"></script>
+	</body>
+</html>

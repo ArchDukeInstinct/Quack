@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Coroutines</title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<h1>Coroutines</h1>
+		<p>Coroutines are specialized routines that enable asynchronous code. The syntax is much like a routine except it contains at least one yield statement. You can also use coroutines to create enumerable routines which are synchronous </p>
+		<section>
+			<h2>Definition</h2>
+			<div class="def"><pre>
+type identifier()
+	statement...
+	yield ms 1000
+	statement...
+	
+type identifier(type parameter...)
+	statement...
+	yield cycle
+	statement...
+			</pre></div>
+		</section>
+		<section>
+			<h2>Definition</h2>
+			<div class="def"><pre>
+/* ========== Example 1 ========== */
+
+void countdown(int count)
+	while count >= 0
+		write(count)
+		--count
+		
+		yield ms 1000
+
+	write("Finish!!!")
+	
+void test()
+	write("Start countdown coroutine")
+	countdown(10)
+	write("This statement will happen immediately after")
+
+/* ========== Example 2 ========== */
+
+int oddNumbers(int index, int count)
+	if index % 2 == 0
+		++index
+		
+	while index < count
+		yield index
+		index += 2
+		
+void test()
+	for i : oddNumbers(1, 10)
+		write(i)
+		write(", ")
+
+			</pre></div>
+		</section>
+		<script type="text/javascript" src="../page.js"></script>
+	</body>
+</html>

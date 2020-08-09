@@ -1,0 +1,210 @@
+/* ================================================================================================
+ * General
+ * ============================================================================================= */
+
+ body {
+    font-size: 18px;
+    font-family: Helvetica;
+    margin: 0;
+    background-color: #111111;
+    color: #52da96;
+}
+
+.wrapper {
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 64px;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: 2px solid;
+    padding-bottom: 8px;
+    margin-bottom: 32px;
+}
+
+/* ================================================================================================
+ * Header
+ * ============================================================================================= */
+
+.header {
+    background-color: #444;
+    height: 64px;
+    margin: 64px 0;
+}
+
+.header > .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.header .logo img {
+    width: auto;
+    height: 230px;
+}
+
+.header .nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.header li {
+    display: inline-block;
+}
+
+.header li a {
+    color: white;
+    text-decoration: none !important;
+    padding: 18px 16px;
+    font-size: 24px;
+    display: block;
+}
+
+ul.submenu {
+    display: none;
+    position: absolute;
+    margin-top: 8px;
+}
+
+ul.submenu > li > a {
+    display: block;
+    background-color: #444444;
+    font-size: 18px;
+    min-width: 150px;
+}
+
+ul.submenu > li > a:hover {
+    background-color: #1a6942;;
+}
+
+ul.submenu > li {
+    display: block;
+}
+
+li:hover > ul.submenu {
+    display: block;
+}
+
+/* ================================================================================================
+ * Footer
+ * ============================================================================================= */
+
+.footer {
+    min-height: 72px;
+    background-color: #222222;
+    margin-top: 32px;
+}
+
+/* ================================================================================================
+ * Main Content
+ * ============================================================================================= */
+
+.main {
+    min-height: calc(100vh - 361px);
+}
+
+.main iframe {
+    border: 0;
+    width: 100%;
+    height: auto;
+}
+
+/* ================================================================================================
+ * Definition
+ * ============================================================================================= */
+
+.def {
+    position: relative;
+    padding: 4px 16px 4px 48px;
+    margin-bottom: 16px;
+    background-color: #1e1e1e;
+    color: #b8d7a3;
+    border: 4px solid #494942;
+    font-family: monospace;
+}
+
+.def .lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: calc(100% - 26px);
+    background-color: #494942;
+    text-align: right;
+    padding: 22px 8px 4px 4px;
+}
+
+.def > pre {
+    cursor: text;
+    padding-left: 12px;
+}
+
+.def .keyword {
+    color: #569cd6;
+}
+
+.def .datatype {
+    color: #4ec9b0;
+}
+
+.def .operator {
+    color: #ff600c;
+}
+
+.def .literal {
+    color: #d69d85;
+}
+
+.def .identifier {
+    color: #c8c8c8;
+}
+
+.def .comment {
+    color: #ea9700;
+}
+
+.def .async {
+    color: #c6ff00;
+}
+
+/* ================================================================================================
+ * Chart
+ * ============================================================================================= */
+
+.chart thead,
+.chart .heading {
+    background-color: #494942;
+    color: #b8d7a3;
+}
+
+.chart td {
+    border: 1px solid #494942;
+}
+
+.chart td {
+    padding: 8px;
+    min-width: 150px;
+}
+
+.chart th,
+.chart .heading td {
+    padding: 16px 8px;
+}
+
+.chart-variables td:not(:nth-child(3)) {
+    text-align: center;
+}
+
+.chart-operators td:nth-child(1), .chart-operators td:nth-child(2) {
+    text-align: center;
+}
+
+.chart-operators .heading td:nth-child(2) {
+    text-align: left;
+}
