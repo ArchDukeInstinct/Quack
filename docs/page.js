@@ -1,11 +1,45 @@
-(function()
+// ============================================================================================================================
+// Controller
+// ============================================================================================================================
+
+var Controller = (function()
 {
 	window.parent.postMessage({
+		msg: "contentInfo",
 		title: document.title,
 		height: document.body.scrollHeight
 	}, "*");
-	
-	
+
+	if (window.self === window.top)
+	{
+		var match = /\/([^./]+).html/.exec(window.location.href);
+		
+		var notice = document.createElement("a");
+		notice.innerHTML = "See Full Context";
+		notice.href = "../index.html#" + match[1];
+		
+		document.body.insertBefore(notice, document.body.children[0]);
+	}
+
+	window.addEventListener("message", function(event)
+	{
+		var data = event.data;
+
+		switch (data.msg)
+		{
+			case "show":
+				
+				break;
+		}
+	});
+})();
+
+// ============================================================================================================================
+// Highlighter
+// ============================================================================================================================
+
+var Highlighter = (function()
+{
 	var rxNotAlphaNumeric 	= /[^A-Za-z0-9]/g;
 	var rxNotAlpha 			= /[^A-Za-z]/g;
 	var rxNotNumeric		= /[^0-9.]/g;
@@ -46,15 +80,15 @@
 		{
 			result.text 	= code.substring(start, match.index);
 			result.index 	= match.index;
+
+			if (match.length > 1)
+				result.text = result.text + match[1];
 		}
 		else
 		{
 			result.text 	= code.substring(start);
 			result.index 	= code.length;
 		}
-		
-		if (match.length > 1)
-			result.text = result.text + match[1];
 	}
 	
 	function format(code)
@@ -148,15 +182,4 @@
 	var special = document.querySelectorAll(".special");
 	for (var i = 0; i < special.length; ++i)
 		linkKeyword(special);
-	
-	if (window.self === window.top)
-	{
-		var match = /\/([^./]+).html/.exec(window.location.href);
-		
-		var notice = document.createElement("a");
-		notice.innerHTML = "See Full Context";
-		notice.href = "../index.html#" + match[1];
-		
-		document.body.insertBefore(notice, document.body.children[0]);
-	}
 })();

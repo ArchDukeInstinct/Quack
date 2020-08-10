@@ -70,6 +70,7 @@ ul.submenu {
     display: none;
     position: absolute;
     margin-top: 8px;
+    border-top: 4px solid #52da96;
 }
 
 ul.submenu > li > a {
@@ -85,6 +86,16 @@ ul.submenu > li > a:hover {
 
 ul.submenu > li {
     display: block;
+}
+
+ul.submenu > li.menu-heading {
+    background-color: #444444;
+    padding: 16px 16px 8px 16px;
+    border-bottom: 2px solid #777777;
+}
+
+ul.submenu li a {
+    padding: 8px 16px;
 }
 
 li:hover > ul.submenu {
@@ -109,10 +120,46 @@ li:hover > ul.submenu {
     min-height: calc(100vh - 361px);
 }
 
-.main iframe {
+.main > .wrapper > iframe {
     border: 0;
     width: 100%;
     height: auto;
+}
+
+/* ================================================================================================
+ * Loading
+ * ============================================================================================= */
+
+.loading {
+    visibility: hidden;
+}
+
+.loader {
+    background-image: url('images/loading.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    min-width: 150px;
+    min-height: 150px;
+    pointer-events: none;
+}
+/*
+.main > .wrapper > iframe {
+    transition: opacity 500ms ease-in-out;
+}
+
+.main > .wrapper > iframe.loading {
+    opacity: 0;
+}*/
+
+.main > .wrapper > .loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 250px 250px;
 }
 
 /* ================================================================================================
