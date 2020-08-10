@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3.41333in" height="3.41333in" viewBox="0 0 1024 1024">
+    <circle cx="25%" cy="50%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite"></animate></circle>
+    <circle cx="33%" cy="33%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="250ms"></animate></circle>
+    <circle cx="50%" cy="25%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="500ms"></animate></circle>
+    <circle cx="67%" cy="33%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="750ms"></animate></circle>
+    <circle cx="75%" cy="50%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="1000ms"></animate></circle>
+    <circle cx="67%" cy="67%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="1250ms"></animate></circle>
+    <circle cx="50%" cy="75%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="1500ms"></animate></circle>
+    <circle cx="33%" cy="67%" r="50" fill="#52da96"><animate xmlns="http://www.w3.org/2000/svg" attributeName="fill" values="#52da96;#000000;#52da96" dur="2s" repeatCount="indefinite" begin="1750ms"></animate></circle>
+</svg>
