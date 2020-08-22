@@ -2,7 +2,19 @@
 <html>
 	<head>
 		<title>Coroutines</title>
-		<link rel="stylesheet" type="text/css" href="../style.css" />
+		<script type="text/javascript">
+			window.addEventListener("message", function(event)
+			{
+				if (event.data.msg !== "init")
+					return;
+
+				var s = document.createElement("script");
+				s.src = "../page.js?v=" + event.data.version;
+				document.head.appendChild(s);
+			});
+
+			window.parent.postMessage({msg: "pageStart"}, "*");
+		</script>
 	</head>
 	<body>
 		<h1>Coroutines</h1>
@@ -22,7 +34,7 @@ type identifier(type parameter...)
 			</pre></div>
 		</section>
 		<section>
-			<h2>Definition</h2>
+			<h2>Examples</h2>
 			<div class="def"><pre>
 /* ========== Example 1 ========== */
 
@@ -57,6 +69,5 @@ void test()
 
 			</pre></div>
 		</section>
-		<script type="text/javascript" src="../page.js"></script>
 	</body>
 </html>

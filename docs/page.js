@@ -4,12 +4,65 @@
 
 var Controller = (function()
 {
-	window.parent.postMessage({
-		msg: "contentInfo",
-		title: document.title,
-		height: document.body.scrollHeight
-	}, "*");
+	var assetsLoading = 0;
 
+	function loadedAsset()
+	{
+		if (--assetsLoading == 0)
+		{
+			window.parent.postMessage({
+				msg: "pageFinish",
+				title: document.title,
+				height: document.body.scrollHeight
+			}, "*");
+		}
+	}
+
+	function loadAssets(assets)
+	{
+		var asset, path, ext;
+
+		for (var i = 0; i < assets.length; ++i)
+		{
+			path = assets[i];
+			ext = path.lastIndexOf(".");
+
+			if (ext >= 0)
+			{
+				switch (path.substring(ext + 1))
+				{
+					case "css":
+						asset = document.createElement("link");
+						asset.rel = "stylesheet";
+						asset.type = "text/css";
+						asset.href = path;
+						break;
+
+					case "js":
+						asset = document.createElement("script");
+						asset.type = "text/javascript";
+						asset.src = path;
+						break;
+
+					default:
+						asset = null;
+						break;
+				}
+			}
+
+			if (asset != null)
+			{
+				asset.onload = loadedAsset;
+
+				document.head.appendChild(asset);
+				++assetsLoading;
+			}
+		}
+	}
+
+	loadAssets(["../style.css"]);
+
+	/*
 	if (window.self === window.top)
 	{
 		var match = /\/([^./]+).html/.exec(window.location.href);
@@ -19,19 +72,7 @@ var Controller = (function()
 		notice.href = "../index.html#" + match[1];
 		
 		document.body.insertBefore(notice, document.body.children[0]);
-	}
-
-	window.addEventListener("message", function(event)
-	{
-		var data = event.data;
-
-		switch (data.msg)
-		{
-			case "show":
-				
-				break;
-		}
-	});
+	}*/
 })();
 
 // ============================================================================================================================
