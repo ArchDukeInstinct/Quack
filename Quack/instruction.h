@@ -46,7 +46,6 @@ namespace qck::Runtime
 		// Control
 		Condition,
 		Goto,
-		Break,
 		Return,
 
 		// Builtin
@@ -55,6 +54,6 @@ namespace qck::Runtime
 		Total
 	};
 
-	extern void instrInit();
-	extern void instrRun(int*, int);
+	//extern void instrInit();
+	//extern void instrRun(int*, int);
 }

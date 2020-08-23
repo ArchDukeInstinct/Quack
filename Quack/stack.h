@@ -12,9 +12,11 @@ namespace qck::Runtime
 	{
 		private:
 
-		const int STACK_SIZE = 512;
+		typedef unsigned char* byte;
 
-		unsigned char* data;
+		const size_t STACK_SIZE = 512;
+
+		byte* buffer;
 		size_t offset;
 
 		public:
@@ -22,12 +24,57 @@ namespace qck::Runtime
 		Stack();
 		~Stack();
 
-		int intPush(int);
-		int intPop();
-		int intPeek();
+		size_t getOffset();
 
-		int strPush(const std::string&);
-		std::string strPop();
-		std::string strPeek();
+		template <typename T>
+		void push(const T& value)
+		{
+			if (offset + sizeof(T) > STACK_SIZE)
+				throw "Stack overflow";
+
+			new (buffer) T(value);
+			offset += sizeof(T);
+		}
+
+		template <typename T>
+		void pop()
+		{
+			if (offset - sizeof(T) < 0)
+				throw "Stack error";
+			
+			offset -= sizeof(T);
+			reinterpret_cast<T*>(buffer + offset)->~T();
+		}
+
+		template <typename T>
+		void pop(T& result)
+		{
+			if (offset - sizeof(T) < 0)
+				throw "Stack error";
+			
+			auto ptr = reinterpret_cast<T*>(buffer + offset);
+
+			offset -= sizeof(T);
+			result = *ptr;
+			ptr->~T();
+		}
+
+		template <typename T>
+		T* peek()
+		{
+			if (offset - sizeof(T) < 0)
+				throw "Stack error";
+
+			return reinterpret_cast<T*>(buffer + offset);
+		}
+
+		template <typename T>
+		T* get(size_t index)
+		{
+			if (offset - sizeof(T) < 0)
+				throw "Stack error";
+
+			return reinterpret_cast<T*>(buffer + index);
+		}
 	};
 }

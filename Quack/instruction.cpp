@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "instruction.h"
 
+/*
 typedef void (*Instr)();
 
 Instr instructions[(unsigned int) qck::Runtime::Instruction::Total];
@@ -181,4 +182,4 @@ void qck::Runtime::instrInit()
 void qck::Runtime::instrRun(int* list, int size)
 {
 
-}
+}*/

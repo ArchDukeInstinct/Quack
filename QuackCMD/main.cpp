@@ -15,10 +15,10 @@ int main(int argc, char** argv)
 	
 	FileParser parser;
 	Compiler compiler;
-	Context context;
 
 	Token token;
 	int col = 0;
+	int* instrList, instrCount;
 
 	if (parser.open(root + "/Assets/test.qck"))
 	{
@@ -35,7 +35,6 @@ int main(int argc, char** argv)
 
 		parser.reset();
 		
-		compiler.setContext(&context);
 		compiler.compile(&parser);
 
 		parser.close();

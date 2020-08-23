@@ -327,11 +327,6 @@ void qck::Compiler::build()
 	}
 }
 
-void qck::Compiler::setContext(Context* pContext)
-{
-	context = pContext;
-}
-
 bool qck::Compiler::compile(Parser* pParser)
 {
 	parser = pParser;
