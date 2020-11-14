@@ -107,7 +107,7 @@ qck::Compilation::SignatureObject* qck::Compilation::SignatureMap::match(Signatu
 void qck::Compilation::SignatureMap::insert(const Signature& signature, Signature::Type t, int i)
 {
 	SignatureList* list = getList(signature);
-	if (match(list, signature) != nullptr)
+	if (list != nullptr && match(list, signature) != nullptr)
 		throw "Signature already exists";
 
 	list->push_front({signature, t, i});
@@ -115,8 +115,12 @@ void qck::Compilation::SignatureMap::insert(const Signature& signature, Signatur
 
 const qck::Compilation::SignatureObject* qck::Compilation::SignatureMap::search(const Signature& signature) const
 {
-	SignatureList* list		= getList(signature);
-	SignatureObject* item	= match(list, signature);
+	SignatureList* list = getList(signature);
+
+	if (list == nullptr)
+		return nullptr;
+
+	SignatureObject* item = match(list, signature);
 
 	return item;
 }

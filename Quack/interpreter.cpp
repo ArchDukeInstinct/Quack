@@ -1,5 +1,18 @@
 #include "pch.h"
 #include "interpreter.h"
+#include "qstring.h"
+
+qck::Runtime::Interpreter::Routine::Routine() :
+	instrList(nullptr), instrSize(0)
+{
+
+}
+
+qck::Runtime::Interpreter::Routine::Routine(int* list, int size) :
+	instrList(list), instrSize(size)
+{
+
+}
 
 void outputEmpty(const std::string&)
 {
@@ -36,6 +49,10 @@ qck::Runtime::Interpreter::Interpreter()
 	instructions[(unsigned int) Instruction::Goto]				= &Interpreter::instrGoto;
 	instructions[(unsigned int) Instruction::Return]			= &Interpreter::instrReturn;
 	instructions[(unsigned int) Instruction::FnWrite]			= &Interpreter::instrFnWrite;
+
+	instrList = nullptr;
+	instrSize = 0;
+	instrCurr = 0;
 }
 
 qck::Runtime::Interpreter::~Interpreter()
@@ -73,11 +90,7 @@ bool qck::Runtime::Interpreter::load(char* data, int dataSize)
 		for (k = 0; i < j; ++i, ++k)
 			list[k] = data[i];
 
-		routines.push_back(Routine());
-
-		auto routine		= routines.at(routines.size() - 1);
-		routine.instrList	= list;
-		routine.instrSize	= size;
+		routines.push_back(Routine(list, size));
 	}
 
 	return true;
@@ -204,17 +217,26 @@ void qck::Runtime::Interpreter::instrIntModulus()
 
 void qck::Runtime::Interpreter::instrIntToStr()
 {
-	throw "Instruction not implemented";
+	int value;
+
+	stack.pop(value);
+
+	QString* str = stack.push<QString>();
+
+	str->append(value);
 }
 
 void qck::Runtime::Interpreter::instrStrPush()
 {
-	throw "Instruction not implemented";
+	int length		= instrList[++instrCurr];
+	QString* str	= stack.push<QString>();
+
+	str->append(instrList + instrCurr, length);
 }
 
 void qck::Runtime::Interpreter::instrStrPop()
 {
-	throw "Instruction not implemented";
+	stack.pop<QString>();
 }
 
 void qck::Runtime::Interpreter::instrStrGetLocal()
@@ -239,17 +261,23 @@ void qck::Runtime::Interpreter::instrStrSetGlobal()
 
 void qck::Runtime::Interpreter::instrStrConcatenate()
 {
-	throw "Instruction not implemented";
+	stack.peek<QString>(2)->append(stack.peek<QString>());
+	stack.pop<QString>();
 }
 
 void qck::Runtime::Interpreter::instrStrGetLength()
 {
-	throw "Instruction not implemented";
+	int index = instrList[++instrCurr];
+	stack.push(stack.get<QString>(index)->getLength());
 }
 
 void qck::Runtime::Interpreter::instrStrToInt()
 {
-	throw "Instruction not implemented";
+	int index = instrList[++instrCurr];
+	int result;
+
+	stack.get<QString>(index)->parse<int>(result);
+	stack.push(result);
 }
 
 void qck::Runtime::Interpreter::instrCondition()

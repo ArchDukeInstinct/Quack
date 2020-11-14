@@ -224,7 +224,7 @@ void qck::Compiler::strPush()
 
 qck::Compiler::Compiler()
 {
-	context = nullptr;
+
 }
 
 qck::Compiler::~Compiler()
@@ -271,6 +271,10 @@ void qck::Compiler::readSignature()
 
 void qck::Compiler::prelink()
 {
+	log << " ======== Compiler Prelink ======== \n";
+
+	routineCount = 0;
+
 	while (next())
 	{
 		if (tokenCurr.is(Token::Category::DataType))
@@ -283,8 +287,14 @@ void qck::Compiler::prelink()
 				expect(Token::Type::ScopeBegin);
 				escape();
 
-				signatures.insert(signature, Compilation::Signature::Type::RoutineGlobal, context->routines.size());
-				context->routines.push_back(Routine());
+				signatures.insert(signature, Compilation::Signature::Type::RoutineGlobal, routineCount++);
+
+				log << "+ Signature (Routine) '" << signature.identifier << "'\n";
+				log << "\tReturn Type: " << DataTypeText[(int) signature.dataType] << "\n";
+				log << "\tParameters: ( ";
+				for (auto p : signature.parameters)
+					log << DataTypeText[(int) p] << " ";
+				log << ")";
 			}
 			else if (tokenCurr == Token::Type::Assign || tokenCurr == Token::Type::LineEnd)
 			{
@@ -313,6 +323,8 @@ void qck::Compiler::build()
 {
 	const Compilation::SignatureObject* obj;
 
+	log << "\n\n\n ======== Compiler Build ======== \n";
+
 	while (next())
 	{
 		if (tokenCurr.is(Token::Category::DataType))
@@ -323,16 +335,27 @@ void qck::Compiler::build()
 
 			if (obj == nullptr)
 				throw "Signature does not exist";
+
+			log << "+ Definition (Routine) '" << signature.identifier << "'\n";
+			log << "\tReturn Type: " << DataTypeText[(int) signature.dataType] << "\n";
+			log << "\tParameters: ( ";
+			for (auto p : signature.parameters)
+				log << DataTypeText[(int) p] << " ";
+			log << ")";
 		}
 	}
 }
 
 bool qck::Compiler::compile(Parser* pParser)
 {
+	if (pParser == nullptr)
+		throw "No parser provided for compilation";
+
 	parser = pParser;
 
 	try
 	{
+		parser->reset();
 		prelink();
 	}
 	catch (const char*)
@@ -340,10 +363,9 @@ bool qck::Compiler::compile(Parser* pParser)
 		return false;
 	}
 
-	parser->reset();
-
 	try
 	{
+		parser->reset();
 		build();
 	}
 	catch (const char*)

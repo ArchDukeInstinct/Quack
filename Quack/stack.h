@@ -27,6 +27,18 @@ namespace qck::Runtime
 		size_t getOffset();
 
 		template <typename T>
+		T* push()
+		{
+			if (offset + sizeof(T) > STACK_SIZE)
+				throw "Stack overflow";
+
+			new (buffer) T();
+			offset += sizeof(T);
+
+			return reinterpret_cast<T*>(buffer - offset);
+		}
+
+		template <typename T>
 		void push(const T& value)
 		{
 			if (offset + sizeof(T) > STACK_SIZE)
@@ -66,6 +78,17 @@ namespace qck::Runtime
 				throw "Stack error";
 
 			return reinterpret_cast<T*>(buffer + offset);
+		}
+
+		template <typename T>
+		T* peek(int count)
+		{
+			int index = offset - sizeof(T) * count;
+
+			if (index < 0)
+				throw "Stack error";
+
+			return reinterpret_cast<T*>(buffer + index);
 		}
 
 		template <typename T>

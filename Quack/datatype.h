@@ -12,4 +12,15 @@ namespace qck
 		String,
 		Auto
 	};
+
+	const std::string DataTypeText[] =
+	{
+		"",
+		"void",
+		"bool",
+		"int",
+		"float",
+		"string",
+		"auto"
+	};
 }

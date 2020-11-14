@@ -32,6 +32,9 @@
     <ClInclude Include="datatype.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="qstring.h">
+      <Filter>Runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="token.cpp">
       <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="qstring.cpp">
+      <Filter>Runtime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

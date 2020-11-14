@@ -147,6 +147,7 @@
     <ClInclude Include="fileparser.h" />
     <ClInclude Include="instruction.h" />
     <ClInclude Include="interpreter.h" />
+    <ClInclude Include="qstring.h" />
     <ClInclude Include="signature.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="parser.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="fileparser.cpp" />
     <ClCompile Include="instruction.cpp" />
     <ClCompile Include="interpreter.cpp" />
+    <ClCompile Include="qstring.cpp" />
     <ClCompile Include="signature.cpp" />
     <ClCompile Include="stack.cpp" />
     <ClCompile Include="parser.cpp" />

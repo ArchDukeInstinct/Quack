@@ -33,11 +33,12 @@ int main(int argc, char** argv)
 				cout << std::left << setw(20) << "\"" + parser.getStringValue() + "\"";
 		}
 
-		parser.reset();
-		
 		compiler.compile(&parser);
-
 		parser.close();
+
+		cout << "\n\n\n";
+		cout << compiler.log.rdbuf();
+		cout << endl;
 	}
 
 	return 0;

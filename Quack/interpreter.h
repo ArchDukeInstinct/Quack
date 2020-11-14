@@ -28,6 +28,9 @@ namespace qck::Runtime
 		{
 			int* instrList;
 			int instrSize;
+
+			Routine();
+			Routine(int*, int);
 		};
 
 		Stack stack;

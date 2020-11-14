@@ -28,9 +28,10 @@ int qck::FileParser::load(char* buffer, int size)
 
 int qck::FileParser::rewind(char* buffer, int size)
 {
-	if (!file.is_open() || !file.good())
+	if (!file.is_open() || file.bad())
 		return 0;
 
+	file.clear();
 	file.seekg(0, file.beg);
 	file.read(buffer, size);
 
